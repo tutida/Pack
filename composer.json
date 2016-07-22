@@ -1,5 +1,5 @@
 {
-    "name": "tutida/Pack",
+    "name": "tutida/pack",
     "description": "CakePHP3 variables in JS",
     "type": "cakephp-plugin",
     "require": {
