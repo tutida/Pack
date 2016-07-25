@@ -13,7 +13,7 @@ In bootstrap.php.
 
 ```php
 <?php
-    Plugin::load('Search');
+    Plugin::load('Pack');
 ```
 
 In controller.
