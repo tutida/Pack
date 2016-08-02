@@ -1,6 +1,7 @@
 <?php
 namespace Pack\Controller\Component;
 
+use Pack\Statics\PackVariables;
 use Cake\Event\Event;
 use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;
@@ -20,47 +21,16 @@ class PackComponent extends Component
     ];
 
     /**
-     * set variables
-     *
-     * @var array
-     */
-    private $variables = [];
-
-    /**
-     * controller object
-     *
-     * @var Cake\Controller\Controller
-     */
-    private $controller;
-
-    /**
-     * Initialize properties.
-     */
-    public function initialize(array $config)
-    {
-        $this->controller = $this->_registry->getController();
-    }
-
-    /**
      * beforeRender
      */
     public function beforeRender(Event $event)
     {
         $namespace = $this->config('namespace');
 
-        $variables = [];
-        if (isset($this->variables[$namespace])) {
-            $variables = $this->variables[$namespace];
-        }
+        $variables = PackVariables::getAll();
 
-        $event->subject->helpers += [
-            'Pack.Pack' => [
-                'namespace' => $namespace,
-                'variables' => $variables,
-            ]
-        ];
+        $event->subject->helpers += ['Pack.Pack' => ['namespace' => $namespace]];
     }
-
 
     /**
      * rename
@@ -85,17 +55,20 @@ class PackComponent extends Component
     }
 
     /**
-     * unset
+     * remove
      */
     public function remove($varName)
     {
         $namespace = $this->config('namespace');
 
-        if (isset($this->variables[$namespace][$varName])) {
-            unset($this->variables[$namespace][$varName]);
+        $variable = PackVariables::get($varName);
+
+        if (!is_null($variable)) {
+            PackVariables::remove($varName);
 
             return true;
         }
+
         return false;
     }
 
@@ -104,7 +77,7 @@ class PackComponent extends Component
      */
     public function show()
     {
-        return $this->variables;
+        return PackVariables::getAll();
     }
 
     /**
@@ -116,7 +89,7 @@ class PackComponent extends Component
 
         $data = $this->json_safe_encode($data);
 
-        $this->variables[$namespace][$varName] = [$data];
+        PackVariables::set($varName, $data);
     }
 
 
