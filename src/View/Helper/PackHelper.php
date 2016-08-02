@@ -1,11 +1,12 @@
 <?php
 namespace Pack\View\Helper;
 
+use Pack\Statics\PackVariables;
 use Cake\View\Helper;
 use Cake\View\View;
 
 /**
- * Escape helper
+ * Pack helper
  */
 class PackHelper extends Helper
 {
@@ -16,7 +17,6 @@ class PackHelper extends Helper
      */
     protected $_defaultConfig = [
         'namespace' => 'Pack',
-        'variables' => []
     ];
 
     /**
@@ -34,10 +34,11 @@ class PackHelper extends Helper
      */
     public function render()
     {
-        $scripts = '';
-        $config = $this->config();
+        $scripts   = '';
+        $config    = $this->config();
+        $variables = PackVariables::getAll();
 
-        if (empty($config['variables'])) {
+        if (empty($variables)) {
             return $scripts;
         }
 
@@ -45,7 +46,7 @@ class PackHelper extends Helper
 
         $scripts  .= $this->renderWrap($config['namespace']);
 
-        $scripts  .= $this->renderVariables($config['namespace'], $config['variables']);
+        $scripts  .= $this->renderVariables($config['namespace'], $variables);
 
         $scripts .= $this->blocks['javascriptend'];
 
