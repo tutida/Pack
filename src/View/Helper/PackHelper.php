@@ -3,30 +3,24 @@ namespace Pack\View\Helper;
 
 use Pack\Statics\PackVariables;
 use Cake\View\Helper;
-use Cake\View\View;
+use Cake\View\StringTemplateTrait;
 
 /**
  * Pack helper
  */
 class PackHelper extends Helper
 {
+    use StringTemplateTrait;
+
     /**
      * Default configuration.
      *
      * @var array
      */
     protected $_defaultConfig = [
-        'namespace' => 'Pack',
-    ];
-
-    /**
-     * blocks.
-     *
-     * @var array
-     */
-    private $blocks = [
-        'javascriptstart' => '<script>',
-        'javascriptend'   => '</script>',
+        'templates' => [
+            'script' => '<script {{attr}}>window.{{namespace}}={};{{variables}}</script>'
+        ],
     ];
 
     /**
@@ -34,44 +28,44 @@ class PackHelper extends Helper
      */
     public function render()
     {
-        $scripts   = '';
-        $config    = $this->config();
         $variables = PackVariables::getAll();
-
         if (empty($variables)) {
             return $scripts;
         }
 
-        $scripts .= $this->blocks['javascriptstart'];
+        $scripts   = '';
+        $namespace = PackVariables::getNamespace();
+        $attr      = PackVariables::getScriptAttr();
 
-        $scripts  .= $this->renderWrap($config['namespace']);
-
-        $scripts  .= $this->renderVariables($config['namespace'], $variables);
-
-        $scripts .= $this->blocks['javascriptend'];
+        $variables = $this->encodeVariables($namespace, $variables);
+        $scripts   = $this->formatTemplate('script', [
+                        'namespace' => $namespace,
+                        'variables' => $variables,
+                        'attr'      => $attr
+                    ]);
 
         return $scripts;
     }
 
     /**
-     * renderWrap
+     * encodeVariables
      */
-    private function renderWrap($namespace)
-    {
-        return "window.{$namespace}={};";
-    }
-
-    /**
-     * renderVariables
-     */
-    private function renderVariables($namespace, $variables)
+    private function encodeVariables($namespace, $variables)
     {
         $jsVars = '';
 
         foreach ($variables as $key => $var) {
-            $jsVars .= "{$namespace}.{$key} = {$var[0]};";
+            $jsVars .= "{$namespace}.{$key} = {$this->json_safe_encode($var)};";
         }
 
         return $jsVars;
+    }
+
+    /**
+     * json_safe_encode
+     */
+    private function json_safe_encode($data)
+    {
+        return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
     }
 }
