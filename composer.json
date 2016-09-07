@@ -6,18 +6,9 @@
         "php": ">=5.4.16",
         "cakephp/cakephp": "~3.0"
     },
-    "require-dev": {
-        "phpunit/phpunit": "*"
-    },
     "autoload": {
         "psr-4": {
             "Pack\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Pack\\Test\\": "tests",
-            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
         }
     }
 }

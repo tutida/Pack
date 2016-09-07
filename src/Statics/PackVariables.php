@@ -1,5 +1,4 @@
 <?php
-
 namespace Pack\Statics;
 
 /**
@@ -7,20 +6,22 @@ namespace Pack\Statics;
  */
 class PackVariables
 {
-    private static $variables = [];
+    private static $variables     = [];
+    private static $namespace     = 'Pack';
+    private static $scriptAttr    = '';
 
     /**
      * set
      */
-    public function set($varName, $data = null)
+    public static function set($varName, $data)
     {
-        self::$variables[$varName] = [$data];
+        self::$variables[$varName] = $data;
     }
 
     /**
      * remove
      */
-    public function remove($varName)
+    public static function remove($varName)
     {
         unset(self::$variables[$varName]);
     }
@@ -28,7 +29,7 @@ class PackVariables
     /**
      * get
      */
-    public function get($varName = null)
+    public static function get($varName)
     {
         if (!isset(self::$variables[$varName])) {
             return null;
@@ -40,9 +41,40 @@ class PackVariables
     /**
      * getAll
      */
-    public function getAll()
+    public static function getAll()
     {
         return self::$variables;
     }
 
+    /**
+     * renameNamespace
+     */
+    public static function renameNamespace($namespace)
+    {
+        self::$namespace = $namespace;
+    }
+
+    /**
+     * getNamespace
+     */
+    public static function getNamespace()
+    {
+        return self::$namespace;
+    }
+
+    /**
+     * setScriptAttr
+     */
+    public static function setScriptAttr($scriptAttr)
+    {
+        self::$scriptAttr = $scriptAttr;
+    }
+
+    /**
+     * getScriptAttr
+     */
+    public static function getScriptAttr()
+    {
+        return self::$scriptAttr;
+    }
 }

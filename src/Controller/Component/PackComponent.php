@@ -4,7 +4,6 @@ namespace Pack\Controller\Component;
 use Pack\Statics\PackVariables;
 use Cake\Event\Event;
 use Cake\Controller\Component;
-use Cake\Controller\ComponentRegistry;
 
 /**
  * Pack component
@@ -12,32 +11,11 @@ use Cake\Controller\ComponentRegistry;
 class PackComponent extends Component
 {
     /**
-     * Default configuration.
-     *
-     * @var array
-     */
-    protected $_defaultConfig = [
-        'namespace' => 'Pack'
-    ];
-
-    /**
      * beforeRender
      */
     public function beforeRender(Event $event)
     {
-        $namespace = $this->config('namespace');
-
-        $variables = PackVariables::getAll();
-
-        $event->subject->helpers += ['Pack.Pack' => ['namespace' => $namespace]];
-    }
-
-    /**
-     * rename
-     */
-    public function rename($namespace = null)
-    {
-        $this->config('namespace', $namespace);
+        $event->subject->helpers += ['Pack.Pack'];
     }
 
     /**
@@ -59,17 +37,14 @@ class PackComponent extends Component
      */
     public function remove($varName)
     {
-        $namespace = $this->config('namespace');
-
         $variable = PackVariables::get($varName);
 
-        if (!is_null($variable)) {
-            PackVariables::remove($varName);
-
-            return true;
+        if (is_null($variable)) {
+            return false;
         }
 
-        return false;
+        PackVariables::remove($varName);
+        return true;
     }
 
     /**
@@ -85,19 +60,48 @@ class PackComponent extends Component
      */
     private function variableSet($varName, $data)
     {
-        $namespace = $this->config('namespace');
-
-        $data = $this->json_safe_encode($data);
-
         PackVariables::set($varName, $data);
     }
 
+    /**
+     * renameNamespace
+     */
+    public function renameNamespace($namespace)
+    {
+        if (empty($namespace)) {
+            return false;
+        }
+
+        PackVariables::renameNamespace($namespace);
+        return true;
+    }
 
     /**
-     * json_safe_encode
+     * getNamespace
      */
-    private function json_safe_encode($data)
+    public function getNamespace()
     {
-        return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+        return PackVariables::getNamespace();
+    }
+
+    /**
+     * setScriptAttr
+     */
+    public function setScriptAttr($attr)
+    {
+        if (empty($attr)) {
+            return false;
+        }
+
+        PackVariables::setScriptAttr($attr);
+        return true;
+    }
+
+    /**
+     * getScriptAttr
+     */
+    public function getScriptAttr()
+    {
+        return PackVariables::getScriptAttr();
     }
 }
