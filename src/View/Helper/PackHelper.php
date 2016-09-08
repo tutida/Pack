@@ -30,10 +30,9 @@ class PackHelper extends Helper
     {
         $variables = PackVariables::getAll();
         if (empty($variables)) {
-            return $scripts;
+            return;
         }
 
-        $scripts   = '';
         $namespace = PackVariables::getNamespace();
         $attr      = PackVariables::getScriptAttr();
 
