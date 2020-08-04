@@ -1,19 +1,19 @@
 # Pack plugin is for CakePHP3
 
-You can easy to pass CakePHP3 variables to JS in View.
+You can easy to pass CakePHP4 variables to JS in View.
 
 ## Requirements ##
 
-* PHP >=5.4
-* CakePHP >= ~3.2
+* PHP >= 7.0
+* CakePHP >= 4.0
 
 ## Installation
 
-In bootstrap.php.
+In Application.php
 
 ```php
 <?php
-    Plugin::load('Pack');
+    $this->addPlugin('Pack');
 ```
 
 In controller.
@@ -31,7 +31,7 @@ In controller.
     }
 ```
 
-In layout ctp or template ctp.
+In layout php or template php.
 
 ```php
     <?= $this->Pack->render();?>
