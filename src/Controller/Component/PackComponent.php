@@ -15,7 +15,7 @@ class PackComponent extends Component
      */
     public function beforeRender(Event $event)
     {
-        $event->subject->helpers += ['Pack.Pack'];
+        $event->getSubject()->viewBuilder()->setHelpers(['Pack']);
     }
 
     /**
