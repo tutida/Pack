@@ -1,10 +1,10 @@
 {
     "name": "tutida/pack",
-    "description": "CakePHP3 variables in JS",
+    "description": "CakePHP4 variables in JS",
     "type": "cakephp-plugin",
     "require": {
-        "php": ">=5.4.16",
-        "cakephp/cakephp": "~3.0"
+        "php": ">=7.0.0",
+        "cakephp/cakephp": "~4.0"
     },
     "autoload": {
         "psr-4": {
